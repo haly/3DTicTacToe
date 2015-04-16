@@ -1,8 +1,24 @@
+/*
+	Author: Francis Yuan
+	Date: 4/12/2015
+*/
 #include <iostream>
-#include "CuboidArray.h"
+#include <string>
+#include "GameManager.h"
 
 int main() {
-	std::cout << "Let's see if I remember how to do this" << std::endl;
-	CuboidArray ca = CuboidArray();
-	std::cout << ca;
+	GameManager game = GameManager();
+	game.initialize();
+	game.introduction();
+	while (!game.quit()) {
+		game.update();
+	}
+
+	/*
+	std::string dummy;
+	std::cout << "Testing this input shit.\n";
+	//std::cin >> dummy;
+	std::getline(std::cin, dummy);
+	std::cout << "The shit you just typed was: " + dummy + "\n";
+	*/
 }

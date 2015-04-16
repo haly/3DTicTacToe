@@ -79,10 +79,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CuboidArray.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CuboidArray.h" />
+    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
