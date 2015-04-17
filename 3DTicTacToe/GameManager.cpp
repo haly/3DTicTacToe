@@ -39,7 +39,6 @@ void GameManager::update() {
 	board.printBoard();
 	printTurn();
 	getInput();
-	nextTurn();
 }
 
 bool GameManager::quit() {
@@ -57,85 +56,93 @@ void GameManager::printTurn() {
 	}
 }
 
+void GameManager::nextTurn() {
+	currentTurn *= -1;
+	turnCounter++;
+}
+
 void GameManager::getInput() {
 	bool valid = false;
 	std::string input;
-	char front;
+	std::vector<std::string> tokens;
 
 	while(!valid) {
 		std::getline(std::cin, input);
 		if (std::cin && !input.empty()) {		// Check to make sure input was recieved and it is not empty.
-			front = input.front();
-			if (front > 47 && front < 58) {		// If the first char is a digit, attempt to read in coordinates.
-				valid = readNumbers(input);
-			}
-			else {								// Otherwise, attempt to read in a command.
-				valid = readLetters(input);
+			split(input, ' ', tokens);
+			switch (tokens.size()) {
+				case 1:							// Only one input, check for valid commands
+					valid = readCommand(tokens);
+					break;
+				case 3:							// Three inputs, check for valid coordinates
+					valid = readCoords(tokens);
+					break;
+				default:
+					std::cerr << "Invalid number of inputs.\n";
 			}
 		}
 		else {
 			std::cerr <<
 				"Missing input or possibly some other issue. Valid input is:\n"
-				"   Three numbers between 1 and 4 separated by a space (e.g. 1 2 3)\n"
-				"   'reset', without quotes, to begin a new game\n"
-				"   'exit', without quotes, to terminate the program\n";
+				"   Three numbers between 1 and 4 separated by a space (e.g. 1 2 3).\n"
+				"   'reset', without quotes, to begin a new game.\n"
+				"   'exit', without quotes, to terminate the program.\n";
 		}
 		std::cin.clear();
+		tokens.clear();
 	} 
 }
 
-bool GameManager::readNumbers(const std::string& s) {
-	std::vector<std::string> tokens;
-	std::vector<int> coordinates;
-	int coord;
+bool GameManager::readCommand(const std::vector<std::string> tokens) {
+	assert(tokens.size() == 1);
 
-	split(s, ' ', tokens);						// Split the coordinates
-	if (tokens.size() != 3) {					// Check that the number of coordinates is 3
-		std::cerr << "Number of coordinates must be three.\n";
+	if (tokens[0].compare("reset") == 0) {
+		std::cout << "Restarting game...\n\n";
+		initialize();
+		return true;
+	}
+	else if (tokens[0].compare("exit") == 0) {
+		isOver = true;
+		return true;
+	}
+	else {
+		std::cout << tokens[0] << " was not a valid command.\n";
 		return false;
 	}
+}
+
+bool GameManager::readCoords(const std::vector<std::string> tokens) {
+	assert(tokens.size() == 3);
+
+	std::vector<int> coordinates;
+	int coord;
 
 	for each (std::string s in tokens) {		// Check every coordinate
 		try {									
 			coord = stoi(s);
 		}
 		catch (std::exception e) {				// Check if it's a number or readable (potentially too large for an int)
-			std::cerr << s << " could not be read into an int.\n"
-				"Details: " << e.what();
+			std::cerr << 
+				s << " could not be read into an int.\n";
 			return false;
 		}
 
-		if (coord < 1 || coord > 4) {			// Check if it's in the board's rangfe
-			std::cerr << coord << " is not a valid coordinate. Valid coordinates go from 1 to 4.\n";
+		if (coord < 1 || coord > 4) {			// Check if it's in the board's range
+			std::cerr << coord << " is out of bounds. Valid coordinates go from 1 to 4.\n";
 			return false;
 		}
+
+		coordinates.push_back(coord);
 	}
 
 	if (board(coordinates) != EMPTY) {			// Check that the given coordinates are empty
 		std::cerr << "The coordinate " << coordinates[0] << ' ' << coordinates[1] << ' ' << coordinates[2] << " is already filled.\n";
 		return false;
 	}
+	else {
+		board(coordinates) = currentTurn;
+		nextTurn();
+	}
 
 	return true;
-}
-
-bool GameManager::readLetters(const std::string& s) {
-	if (s.compare("reset") == 0) {
-		std::cout << "Restarting game...\n\n";
-		return true;
-	}
-	else if (s.compare("exit") == 0) {
-		isOver = true;
-		return true;
-	}
-	else {
-		std::cout << s + " was not valid input.\n";
-		return false;
-	}
-}
-
-
-void GameManager::nextTurn() {
-	currentTurn *= -1;
-	turnCounter++;
 }

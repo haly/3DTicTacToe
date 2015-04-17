@@ -73,19 +73,14 @@ private:
 	void getInput();
 
 	/*
-		Helper function to read numbers and inform the user of any syntatical errors.
-	 */
-	bool readNumbers(const std::string& s);
+		Helper function to read single commands and inform the user of any syntatical errors.
+	*/
+	bool readCommand(const std::vector<std::string> tokens);
 
 	/*
-		Helper function to read letters and inform the user of any syntatical errors.
+		Helper function to read three sequential numbers representing coordinates and inform the user of any syntatical errors.
 	 */
-	bool readLetters(const std::string& s);
-
-	/*
-		Resets the game.
-	 */
-	void reset();
+	bool readCoords(const std::vector<std::string> tokens);
 };
 
 enum BOARD_SPACES { 

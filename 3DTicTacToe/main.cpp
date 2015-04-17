@@ -13,12 +13,4 @@ int main() {
 	while (!game.quit()) {
 		game.update();
 	}
-
-	/*
-	std::string dummy;
-	std::cout << "Testing this input shit.\n";
-	//std::cin >> dummy;
-	std::getline(std::cin, dummy);
-	std::cout << "The shit you just typed was: " + dummy + "\n";
-	*/
 }
