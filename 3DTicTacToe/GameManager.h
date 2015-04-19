@@ -32,14 +32,14 @@ public:
 	~GameManager();
 
 	/*
-		Sets initial default values.
+		Sets initial values for a new game.
 	 */
 	void initialize();
 
 	/*
 		Prints game instructions to the console.
 	*/
-	void introduction();
+	void introduction() const;
 
 	/*
 		Cycles through game logic.
@@ -47,15 +47,19 @@ public:
 	void update();
 
 	/*
-		Returns isOver for the purpose of exiting the program.
+		Returns quitFlag for exiting the program.
 	 */
-	bool quit();
+	bool quit() const;
 
 private:
+	static const int MAX_TURNS = 64;
+
+	int currentTurn = 0;
+	int turnCounter = 0;
+	bool gameOver = false;
+	bool quitFlag = false;
+
 	CuboidArray board;
-	int currentTurn;
-	int turnCounter;
-	bool isOver;
 
 	/*
 		Prints the current player's turn in the console.
@@ -81,6 +85,11 @@ private:
 		Helper function to read three sequential numbers representing coordinates and inform the user of any syntatical errors.
 	 */
 	bool readCoords(const std::vector<std::string> tokens);
+
+	/*
+		Checks if a winning move was just made, or if the entire board was just filled
+	 */
+	void checkGameOver(std::vector<int> coords);
 };
 
 enum BOARD_SPACES { 

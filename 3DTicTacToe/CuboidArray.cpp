@@ -6,7 +6,6 @@
 
 
 CuboidArray::CuboidArray() {
-	zero();
 }
 
 
@@ -33,26 +32,6 @@ int& CuboidArray::operator()(const std::vector<int>& coords) {
 	return elements[(row * LENGTH) + (col) + (slice * LENGTH_SQUARE)];
 }
 
-std::ostream& operator<<(std::ostream& out, const CuboidArray& ca) {
-	int sliceOffset, index;
-
-	for (int i = 0; i < 4; i++) {										// Loops through the rows.
-		sliceOffset = 0;												// Resets the sliceOffset
-
-		for (int j = 0; j < 16; j++) {									// Loops through the 16 elements of each row of the formatted string
-			index = i * ca.LENGTH + j + sliceOffset;					// Calculate the corresponding index using the row i, the column j, and the sliceOffset
-			out << '[' << std::to_string(ca.elements[index]) << ']';	// Append the element to the stream between square brackets
-			if ((j + 1) % 4 == 0) {										// At the end of every 4 elements
-				out << "   ";											// Include some space for visual clarity
-				sliceOffset += 12;										// Add 12 to the offset, since there are 16 elements per slice, 4 of which were printed already
-			}
-		}
-		out << '\n';													// Start on a new line for the next row
-	}
-
-	return out;
-}
-
 void CuboidArray::zero() {
 	for (int i = 0; i < SIZE; i++) {
 		elements[i] = 0;
@@ -60,7 +39,7 @@ void CuboidArray::zero() {
 }
 
 // See overloaded << operator for loop explanation.
-void CuboidArray::printBoard() {
+void CuboidArray::printBoard() const{
 	int sliceOffset, index;
 	char convertedChar;
 
@@ -90,4 +69,24 @@ void CuboidArray::printBoard() {
 		std::cout << '\n';											
 	}
 	std::cout << '\n';
+}
+
+std::ostream& operator<<(std::ostream& out, const CuboidArray& ca) {
+	int sliceOffset, index;
+
+	for (int i = 0; i < 4; i++) {										// Loops through the rows.
+		sliceOffset = 0;												// Resets the sliceOffset
+
+		for (int j = 0; j < 16; j++) {									// Loops through the 16 elements of each row of the formatted string
+			index = i * ca.LENGTH + j + sliceOffset;					// Calculate the corresponding index using the row i, the column j, and the sliceOffset
+			out << '[' << std::to_string(ca.elements[index]) << ']';	// Append the element to the stream between square brackets
+			if ((j + 1) % 4 == 0) {										// At the end of every 4 elements
+				out << "   ";											// Include some space for visual clarity
+				sliceOffset += 12;										// Add 12 to the offset, since there are 16 elements per slice, 4 of which were printed already
+			}
+		}
+		out << '\n';													// Start on a new line for the next row
+	}
+
+	return out;
 }

@@ -43,23 +43,23 @@ public:
 
 	/*
 		Allows read/write access to a single element using a <vector> of ints. The length must be 3.
-	*/
+	 */
 	int& CuboidArray::operator()(const std::vector<int>& coords);
 
-	/* 
-		Prints the raw contents of the CuboidArray to a stream.
-		The format is:
+	/*
+	Prints the raw contents of the CuboidArray to a stream.
+	The format is:
 
-		[0][1][2][3]  [16][17][18][19]  [32][33][34][35]  [48][49][50][51]
-		[4][5][6][7]  ...               ...               ...
+	[0][1][2][3]  [16][17][18][19]  [32][33][34][35]  [48][49][50][51]
+	[4][5][6][7]  ...               ...               ...
 
-		Where the numbers indicate the corresponding index of the internal array.
-	 */
+	Where the numbers indicate the corresponding index of the internal array.
+	*/
 	friend std::ostream& operator<<(std::ostream& out, const CuboidArray& ca);
 
 	/*
-	Sets all elements to 0.
-	*/
+		Sets all elements to 0.
+	 */
 	void zero();
 
 	/*
@@ -67,19 +67,20 @@ public:
 		1 is displayed as X.
 		-1 is displayed as O.
 		All other numbers are displayed as blank spaces.
-	*/
-	void printBoard();
+	 */
+	void printBoard() const;
 
 	/*
-		Checks to see if there are four of a number in a straight or diagonal row.
+		Checks to see if there are four of a number in a straight or diagonal row at the specified coordinates.
 	 */
-	bool isRowOfFour(int x);
+	bool isRowOfFour(int x, const std::vector<int>& coords) const;
 
 private:
 	static const size_t SIZE = 64;
 	static const int LENGTH = 4;
 	static const int LENGTH_SQUARE = 16;
-	int elements[SIZE];						
+
+	int elements[SIZE];
 };
 
 #endif

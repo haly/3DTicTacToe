@@ -5,8 +5,7 @@
 #include "GameManager.h"
 
 
-GameManager::GameManager() {
-	board = CuboidArray();
+GameManager::GameManager() : board() {
 }
 
 
@@ -17,10 +16,11 @@ void GameManager::initialize() {
 	board.zero();
 	currentTurn = PLAYER_X;
 	turnCounter = 1;
-	isOver = false;
+	gameOver = false;
+	quitFlag = false;
 }
 
-void GameManager::introduction() {
+void GameManager::introduction() const {
 	std::cout <<
 		"3D TicTacToe, by Francis Yuan\n"
 		"How to play:\n"
@@ -36,24 +36,19 @@ void GameManager::introduction() {
 }
 
 void GameManager::update() {
-	board.printBoard();
-	printTurn();
+	if (!gameOver) {
+		board.printBoard();
+		printTurn();
+	}
 	getInput();
 }
 
-bool GameManager::quit() {
-	return isOver;
+bool GameManager::quit() const {
+	return quitFlag;
 }
 
 void GameManager::printTurn() {
-	switch (currentTurn) {
-		case PLAYER_X:
-			std::cout << "Player X's turn:\n";
-			break;
-		case PLAYER_O:
-			std::cout << "Player O's turn:\n";
-			break;
-	}
+	std::cout << ((currentTurn == PLAYER_X) ? "Player X's turn:\n" : "Player O's turn:\n");
 }
 
 void GameManager::nextTurn() {
@@ -71,10 +66,10 @@ void GameManager::getInput() {
 		if (std::cin && !input.empty()) {		// Check to make sure input was recieved and it is not empty.
 			split(input, ' ', tokens);
 			switch (tokens.size()) {
-				case 1:							// Only one input, check for valid commands
+				case 1:							// Only one input, check for valid commands.
 					valid = readCommand(tokens);
 					break;
-				case 3:							// Three inputs, check for valid coordinates
+				case 3:							// Three inputs, check for valid coordinates.
 					valid = readCoords(tokens);
 					break;
 				default:
@@ -86,7 +81,7 @@ void GameManager::getInput() {
 				"Missing input or possibly some other issue. Valid input is:\n"
 				"   Three numbers between 1 and 4 separated by a space (e.g. 1 2 3).\n"
 				"   'reset', without quotes, to begin a new game.\n"
-				"   'exit', without quotes, to terminate the program.\n";
+				"   'quit', without quotes, to terminate the program.\n";
 		}
 		std::cin.clear();
 		tokens.clear();
@@ -101,12 +96,12 @@ bool GameManager::readCommand(const std::vector<std::string> tokens) {
 		initialize();
 		return true;
 	}
-	else if (tokens[0].compare("exit") == 0) {
-		isOver = true;
+	else if (tokens[0].compare("quit") == 0) {
+		quitFlag = true;
 		return true;
 	}
 	else {
-		std::cout << tokens[0] << " was not a valid command.\n";
+		std::cout << '\'' << tokens[0] << '\'' << " was not a valid command.\n";
 		return false;
 	}
 }
@@ -117,32 +112,42 @@ bool GameManager::readCoords(const std::vector<std::string> tokens) {
 	std::vector<int> coordinates;
 	int coord;
 
-	for each (std::string s in tokens) {		// Check every coordinate
+	for each (std::string s in tokens) {		
 		try {									
 			coord = stoi(s);
 		}
-		catch (std::exception e) {				// Check if it's a number or readable (potentially too large for an int)
-			std::cerr << 
-				s << " could not be read into an int.\n";
+		catch (std::exception e) {				// Check if token is a number or readable (potentially too large for an int).
+			std::cerr << "The entry "  << s << " could not be read into an int.\n";
 			return false;
 		}
 
-		if (coord < 1 || coord > 4) {			// Check if it's in the board's range
-			std::cerr << coord << " is out of bounds. Valid coordinates go from 1 to 4.\n";
+		if (coord < 1 || coord > 4) {			// Check if token in the board's range.
+			std::cerr << "The entry " << coord << " is out of bounds. Valid coordinates go from 1 to 4.\n";
 			return false;
 		}
 
 		coordinates.push_back(coord);
 	}
 
-	if (board(coordinates) != EMPTY) {			// Check that the given coordinates are empty
-		std::cerr << "The coordinate " << coordinates[0] << ' ' << coordinates[1] << ' ' << coordinates[2] << " is already filled.\n";
+	if (board(coordinates) != EMPTY) {			// Check that the given coordinates are empty.
+		std::cerr << "The coordinate (" << coordinates[0] << ' ' << coordinates[1] << ' ' << coordinates[2] << ") is already filled.\n";
 		return false;
 	}
 	else {
 		board(coordinates) = currentTurn;
+		checkGameOver(coordinates);
 		nextTurn();
 	}
 
 	return true;
+}
+
+void GameManager::checkGameOver(std::vector<int> coords) {
+	assert(coords.size() == 3);
+
+	// TODO: Check for game win
+
+	if (turnCounter == MAX_TURNS) {
+		gameOver = true;
+	}
 }
