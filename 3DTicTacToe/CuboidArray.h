@@ -10,6 +10,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include "VectorInt3.h"
 
 /*
 	CuboidArray is a 3D array (4*4*4) of ints representing the game board for a game of 3D TicTacToe.
@@ -39,12 +40,16 @@ public:
 	/*
 		Allows read/write access to a single element using 3 coordinates.
 	 */
-	int& CuboidArray::operator()(const int row, const int col, const int slice);
+	const int& CuboidArray::operator()(const int row, const int col, const int slice) const;
+	int& CuboidArray::operator()(const int row, const int col, const int slice) ;
+	
 
 	/*
-		Allows read/write access to a single element using a <vector> of ints. The length must be 3.
+		Allows read/write access to a single element using a VectorInt3.
 	 */
-	int& CuboidArray::operator()(const std::vector<int>& coords);
+	const int& CuboidArray::operator()(const VectorInt3& coords) const;
+	int& CuboidArray::operator()(const VectorInt3& coords);
+	
 
 	/*
 	Prints the raw contents of the CuboidArray to a stream.
@@ -71,9 +76,9 @@ public:
 	void printBoard() const;
 
 	/*
-		Checks to see if there are four of a number in a straight or diagonal row at the specified coordinates.
+		Checks to see if there are any straight or diagonal lines of four of a number at the specified coordinates.
 	 */
-	bool isRowOfFour(int x, const std::vector<int>& coords) const;
+	bool findLineOfFour(const int x, const VectorInt3& coords) const;
 
 private:
 	static const size_t SIZE = 64;
@@ -81,6 +86,38 @@ private:
 	static const int LENGTH_SQUARE = 16;
 
 	int elements[SIZE];
+	std::vector<VectorInt3> directions;
+
+	/*
+		Helper function to count occurances of a single integer from a starting point in a direction
+	 */
+	int sumInDirection(const int x, const VectorInt3& coords, const VectorInt3& dir) const;
+
+	/*
+		Populate the list of directions used to check for four in a line.
+
+		This function is necessary because VS2013 is behind on its implementation of initialization lists in C++11. 
+		Otherwise, the following code could probably be used in the header.
+
+		std::vector<VectorInt3> directions = {
+			VectorInt3{ 1, 0, 0 },
+			VectorInt3{ 0, 1, 0 },
+			VectorInt3{ 0, 0, 1 },
+			VectorInt3{-1, 1, 0 },
+			VectorInt3{ 1, 1, 0 },
+			VectorInt3{ 0, 1,-1 },
+			VectorInt3{ 0, 1, 1 },
+			VectorInt3{-1, 0, 1 },
+			VectorInt3{ 1, 0, 1 },
+			VectorInt3{-1, 1, 1 },
+			VectorInt3{ 1, 1, 1 },
+			VectorInt3{-1, 1,-1 },
+			VectorInt3{ 1, 1,-1 }
+		}
+
+		It's regrettable.
+	*/
+	void fillDirections();
 };
 
 #endif

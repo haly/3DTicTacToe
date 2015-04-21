@@ -86,8 +86,8 @@
   <ItemGroup>
     <ClInclude Include="CuboidArray.h" />
     <ClInclude Include="GameManager.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="util.h" />
+    <ClInclude Include="VectorInt3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

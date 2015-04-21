@@ -88,7 +88,7 @@ void GameManager::getInput() {
 	} 
 }
 
-bool GameManager::readCommand(const std::vector<std::string> tokens) {
+bool GameManager::readCommand(const std::vector<std::string>& tokens) {
 	assert(tokens.size() == 1);
 
 	if (tokens[0].compare("reset") == 0) {
@@ -106,18 +106,18 @@ bool GameManager::readCommand(const std::vector<std::string> tokens) {
 	}
 }
 
-bool GameManager::readCoords(const std::vector<std::string> tokens) {
+bool GameManager::readCoords(const std::vector<std::string>& tokens) {
 	assert(tokens.size() == 3);
 
-	std::vector<int> coordinates;
+	VectorInt3 coordinates;
 	int coord;
 
-	for each (std::string s in tokens) {		
+	for (unsigned int i = 0; i < tokens.size(); i++) {
 		try {									
-			coord = stoi(s);
+			coord = stoi(tokens[i]);
 		}
 		catch (std::exception e) {				// Check if token is a number or readable (potentially too large for an int).
-			std::cerr << "The entry "  << s << " could not be read into an int.\n";
+			std::cerr << "The entry "  << coord << " could not be read into an int.\n";
 			return false;
 		}
 
@@ -126,28 +126,33 @@ bool GameManager::readCoords(const std::vector<std::string> tokens) {
 			return false;
 		}
 
-		coordinates.push_back(coord);
+		coordinates[i] = coord - 1;
 	}
 
 	if (board(coordinates) != EMPTY) {			// Check that the given coordinates are empty.
-		std::cerr << "The coordinate (" << coordinates[0] << ' ' << coordinates[1] << ' ' << coordinates[2] << ") is already filled.\n";
+		std::cerr << "The coordinate (" << (coordinates[0] + 1) << ' ' << (coordinates[1] + 1)<< ' ' << (coordinates[2] + 1)<< ") is already filled.\n";
 		return false;
 	}
 	else {
 		board(coordinates) = currentTurn;
-		checkGameOver(coordinates);
-		nextTurn();
+		checkGameOver(currentTurn, coordinates);
+		if (!gameOver) {
+			nextTurn();
+		}
 	}
 
 	return true;
 }
 
-void GameManager::checkGameOver(std::vector<int> coords) {
-	assert(coords.size() == 3);
+void GameManager::checkGameOver(const int& turn, const VectorInt3& coords) {
 
-	// TODO: Check for game win
-
-	if (turnCounter == MAX_TURNS) {
+	if (board.findLineOfFour(turn, coords)) {
 		gameOver = true;
+		std::string winner = (turn == PLAYER_X) ? "Player X" : "Player O";
+		std::cout << winner << " is the winner! Type 'reset' to start a new game or 'quit' to close the program.\n";
+	}
+	else if (turnCounter == MAX_TURNS) {
+		gameOver = true;
+		std::cout << "The game is a tie. Type 'reset' to start a new game or 'quit' to close the program.\n";
 	}
 }

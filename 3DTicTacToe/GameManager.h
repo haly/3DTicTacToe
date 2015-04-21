@@ -9,9 +9,10 @@
 #include <string>
 #include <iostream>
 #include <vector>
+
 #include "CuboidArray.h"
 #include "util.h"
-
+#include "VectorInt3.h"
 /*
 	GameManager is an instance of 3D TicTacToe and is responsible for flow control.
 
@@ -56,8 +57,8 @@ private:
 
 	int currentTurn = 0;
 	int turnCounter = 0;
-	bool gameOver = false;
-	bool quitFlag = false;
+	bool gameOver = true;
+	bool quitFlag = true;
 
 	CuboidArray board;
 
@@ -79,17 +80,17 @@ private:
 	/*
 		Helper function to read single commands and inform the user of any syntatical errors.
 	*/
-	bool readCommand(const std::vector<std::string> tokens);
+	bool readCommand(const std::vector<std::string>& tokens);
 
 	/*
 		Helper function to read three sequential numbers representing coordinates and inform the user of any syntatical errors.
 	 */
-	bool readCoords(const std::vector<std::string> tokens);
+	bool readCoords(const std::vector<std::string>& tokens);
 
 	/*
 		Checks if a winning move was just made, or if the entire board was just filled
 	 */
-	void checkGameOver(std::vector<int> coords);
+	void checkGameOver(const int& turn, const VectorInt3& coords);
 };
 
 enum BOARD_SPACES { 
