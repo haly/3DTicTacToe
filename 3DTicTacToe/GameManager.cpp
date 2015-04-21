@@ -148,11 +148,13 @@ void GameManager::checkGameOver(const int& turn, const VectorInt3& coords) {
 
 	if (board.findLineOfFour(turn, coords)) {
 		gameOver = true;
+		board.printBoard();
 		std::string winner = (turn == PLAYER_X) ? "Player X" : "Player O";
 		std::cout << winner << " is the winner! Type 'reset' to start a new game or 'quit' to close the program.\n";
 	}
 	else if (turnCounter == MAX_TURNS) {
 		gameOver = true;
+		board.printBoard();
 		std::cout << "The game is a tie. Type 'reset' to start a new game or 'quit' to close the program.\n";
 	}
 }

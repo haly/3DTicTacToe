@@ -7,12 +7,10 @@
 #include "GameManager.h"
 
 int main() {
-	/*
 	GameManager game;
 	game.initialize();
 	game.introduction();
 	while (!game.quit()) {
 		game.update();
 	}
-	*/
 }

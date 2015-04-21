@@ -51,7 +51,7 @@ int& CuboidArray::operator()(const VectorInt3& coords)  {
 std::ostream& operator<<(std::ostream& out, const CuboidArray& ca) {
 	int sliceOffset, index;
 
-	for (int i = 0; i < 4; ++i) {										// Loops through the rows.
+	for (int i = 0; i < ca.LENGTH; ++i) {									// Loops through the rows.
 		sliceOffset = 0;												// Resets the sliceOffset
 
 		for (int j = 0; j < 16; ++j) {									// Loops through the 16 elements of each row of the formatted string
@@ -79,10 +79,10 @@ void CuboidArray::printBoard() const{
 	int sliceOffset, index;
 	char convertedChar;
 
-	for (int i = 0; i < 4; ++i) {								
+	for (int i = 0; i < LENGTH; ++i) {								
 		sliceOffset = 0;												
 
-		for (int j = 0; j < 16; ++j) {									
+		for (int j = 0; j < LENGTH_SQUARE; ++j) {									
 			index = i * LENGTH + j + sliceOffset;					
 
 			switch (elements[index]) {		// Determine the correct char to print based on the element.
@@ -97,7 +97,7 @@ void CuboidArray::printBoard() const{
 			}
 
 			std::cout << '[' << convertedChar << ']';	
-			if ((j + 1) % 4 == 0) {										
+			if ((j + 1) % LENGTH == 0) {										
 				std::cout << "   ";										
 				sliceOffset += 12;										
 			}
@@ -115,8 +115,12 @@ bool CuboidArray::findLineOfFour(const int x, const VectorInt3& coords) const {
 
 		sum += sumInDirection(x, coords, dir);
 		sum += sumInDirection(x, coords, dir.inverse());
+
+		if (sum == 4) {
+			return true;
+		}
 	}
-	return sum == 4;
+	return false;
 }
 
 int CuboidArray::sumInDirection(const int x, const VectorInt3& coords, const VectorInt3& dir) const {
@@ -128,7 +132,7 @@ int CuboidArray::sumInDirection(const int x, const VectorInt3& coords, const Vec
 		position += dir;
 
 		for (int i = 0; i < 3; ++i) {			// First check if the position is moving out of bounds.
-			if (position[i] < 0 || position[i] > 3) {
+			if (position[i] < 0 || position[i] >= LENGTH) {
 				return sum;
 			}
 		}
