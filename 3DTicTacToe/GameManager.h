@@ -12,7 +12,7 @@
 
 #include "CuboidArray.h"
 #include "util.h"
-#include "VectorInt3.h"
+#include "IntVector3.h"
 /*
 	GameManager is an instance of 3D TicTacToe and is responsible for flow control.
 
@@ -42,6 +42,13 @@ public:
 	*/
 	void introduction() const;
 
+	// TEMPORARY FUNCTIONS THAT WILL BE REPLACED WITH A PROPER MENU SYSTEM
+	/*
+		Begins a long chain of input requests to sdetermine the initial state of the game.
+	*/
+	void setup();
+	// END TEMPORARY FUNCTIONS
+
 	/*
 		Cycles through game logic.
 	 */
@@ -55,9 +62,18 @@ public:
 private:
 	static const int MAX_TURNS = 64;
 
-	int currentTurn = 0;
+	// TEMPORARY VARIABLES THAT WILL BE REPLACED WITH THE PLAYER SYSTEM
+	int numberOfHumans = 0;
+	int difficultyX = 0;
+	int difficultyY = 0;
+	// END TEMPORARY VARIABLES
+
+	// Variables for in-game use
 	int turnCounter = 0;
-	bool gameOver = true;
+	int currentTurn = 0;
+
+	// Variables for state tracking
+	int gameState = 0;
 	bool quitFlag = true;
 
 	CuboidArray board;
@@ -90,13 +106,18 @@ private:
 	/*
 		Checks if a winning move was just made, or if the entire board was just filled
 	 */
-	void checkGameOver(const int& turn, const VectorInt3& coords);
+	bool checkWinningMove(const int& turn, const IntVector3& coords);
 };
 
 enum BOARD_SPACES { 
 	EMPTY = 0,
 	PLAYER_X = 1, 
 	PLAYER_O = -1,
+};
+
+enum GAME_STATE {
+	PRE_GAME = 0,
+	GAME_COMMENCE,
 };
 
 #endif

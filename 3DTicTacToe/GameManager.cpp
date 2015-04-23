@@ -14,30 +14,49 @@ GameManager::~GameManager() {
 
 void GameManager::initialize() {
 	board.zero();
-	currentTurn = PLAYER_X;
 	turnCounter = 1;
-	gameOver = false;
+	currentTurn = PLAYER_X;
+	gameState = GAME_COMMENCE;
 	quitFlag = false;
 }
 
 void GameManager::introduction() const {
 	std::cout <<
 		"3D TicTacToe, by Francis Yuan\n"
-		"How to play:\n"
-		"   - X goes first, O goes second\n"
-		"   - First to make 4 in a row, straight or diagonal, wins\n"
-		"   - Take turns by entering three coordinates separated by spaces\n"
-		"     E.g. 1, 2, 3\n"
-		"     First coordinate is row, second is column, third is grid\n"
-		"     Valid numbers are 1 - 4\n"
-		"   - Enter 'reset' to begin a new game\n"
-		"   - Enter 'quit' to terminate the program\n"
+		"Enter the number of human players.\n"
+		"'1' to play against an AI.\n"
+		"'2' to play against another local player.\n"
+		"\n"
+		"Other commands that can be entered at any time:\n"
+		"'reset' to return to this menu.\n"
+		"'quit' to quit the program.\n"
 		"\n";
 }
 
+void GameManager::setup() {
+	std::cout <<
+		"Setup"
+		"Enter the number of human players: (1, 2)";
+
+	std::string s;
+	while (std::cin >> s) {
+		try {
+			numberOfHumans = stoi(s);
+		}
+		catch (std::exception e) {
+			std::cerr << "Input is either not a number or too large.\n";
+		}
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	}
+
+	// TODO: Fill the rest of the logic
+
+}
+
 void GameManager::update() {
-	if (!gameOver) {
-		board.printBoard();
+	if (gameState == GAME_COMMENCE) {
+		std::cout << board.printBoard();
 		printTurn();
 	}
 	getInput();
@@ -77,11 +96,7 @@ void GameManager::getInput() {
 			}
 		}
 		else {
-			std::cerr <<
-				"Missing input or possibly some other issue. Valid input is:\n"
-				"   Three numbers between 1 and 4 separated by a space (e.g. 1 2 3).\n"
-				"   'reset', without quotes, to begin a new game.\n"
-				"   'quit', without quotes, to terminate the program.\n";
+			std::cerr << "Missing input or possibly some other issue.\n";
 		}
 		std::cin.clear();
 		tokens.clear();
@@ -109,7 +124,7 @@ bool GameManager::readCommand(const std::vector<std::string>& tokens) {
 bool GameManager::readCoords(const std::vector<std::string>& tokens) {
 	assert(tokens.size() == 3);
 
-	VectorInt3 coordinates;
+	IntVector3 coordinates;
 	int coord;
 
 	for (unsigned int i = 0; i < tokens.size(); i++) {
@@ -135,8 +150,12 @@ bool GameManager::readCoords(const std::vector<std::string>& tokens) {
 	}
 	else {
 		board(coordinates) = currentTurn;
-		checkGameOver(currentTurn, coordinates);
-		if (!gameOver) {
+
+		if (checkWinningMove(currentTurn, coordinates)) {
+			gameState = PRE_GAME;
+		}
+
+		if (gameState == GAME_COMMENCE) {
 			nextTurn();
 		}
 	}
@@ -144,17 +163,18 @@ bool GameManager::readCoords(const std::vector<std::string>& tokens) {
 	return true;
 }
 
-void GameManager::checkGameOver(const int& turn, const VectorInt3& coords) {
+bool GameManager::checkWinningMove(const int& turn, const IntVector3& coords) {
 
 	if (board.findLineOfFour(turn, coords)) {
-		gameOver = true;
 		board.printBoard();
 		std::string winner = (turn == PLAYER_X) ? "Player X" : "Player O";
 		std::cout << winner << " is the winner! Type 'reset' to start a new game or 'quit' to close the program.\n";
+		return true;
 	}
 	else if (turnCounter == MAX_TURNS) {
-		gameOver = true;
 		board.printBoard();
 		std::cout << "The game is a tie. Type 'reset' to start a new game or 'quit' to close the program.\n";
+		return true;
 	}
+	return false;
 }

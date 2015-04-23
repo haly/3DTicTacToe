@@ -28,7 +28,7 @@ int& CuboidArray::operator()(const int row, const int col, const int slice) {
 		);
 }
 
-const int& CuboidArray::operator()(const VectorInt3& coords) const {
+const int& CuboidArray::operator()(const IntVector3& coords) const {
 	int row = coords[0];
 	int col = coords[1];
 	int slice = coords[2];
@@ -40,7 +40,7 @@ const int& CuboidArray::operator()(const VectorInt3& coords) const {
 }
 
 // See above for explanation of this function's wretched existence.
-int& CuboidArray::operator()(const VectorInt3& coords)  {
+int& CuboidArray::operator()(const IntVector3& coords)  {
 	return
 		const_cast<int&>(
 			static_cast<const CuboidArray&>(*this).operator()(coords)
@@ -75,7 +75,8 @@ void CuboidArray::zero() {
 }
 
 // See overloaded << operator for loop explanation.
-void CuboidArray::printBoard() const{
+std::string CuboidArray::printBoard() const{
+	std::string output;
 	int sliceOffset, index;
 	char convertedChar;
 
@@ -96,19 +97,20 @@ void CuboidArray::printBoard() const{
 					convertedChar = ' ';
 			}
 
-			std::cout << '[' << convertedChar << ']';	
+			output += {'[', convertedChar, ']'};
 			if ((j + 1) % LENGTH == 0) {										
-				std::cout << "   ";										
+				output += "   ";										
 				sliceOffset += 12;										
 			}
 		}
-		std::cout << '\n';											
+		output += '\n';
 	}
-	std::cout << '\n';
+	output += '\n';
+	return output;
 }
 
 
-bool CuboidArray::findLineOfFour(const int x, const VectorInt3& coords) const {
+bool CuboidArray::findLineOfFour(const int x, const IntVector3& coords) const {
 	int sum;
 	for (auto const& dir : directions) {	
 		sum = 1;
@@ -123,9 +125,9 @@ bool CuboidArray::findLineOfFour(const int x, const VectorInt3& coords) const {
 	return false;
 }
 
-int CuboidArray::sumInDirection(const int x, const VectorInt3& coords, const VectorInt3& dir) const {
+int CuboidArray::sumInDirection(const int x, const IntVector3& coords, const IntVector3& dir) const {
 	bool inBounds = true;
-	VectorInt3 position(coords);
+	IntVector3 position(coords);
 	int sum = 0;
 
 	while (inBounds) {
@@ -146,17 +148,17 @@ int CuboidArray::sumInDirection(const int x, const VectorInt3& coords, const Vec
 }
 
 void CuboidArray::fillDirections() {
-	directions.emplace_back(VectorInt3{ 1, 0, 0 });
-	directions.emplace_back(VectorInt3{ 0, 1, 0 });
-	directions.emplace_back(VectorInt3{ 0, 0, 1 });
-	directions.emplace_back(VectorInt3{-1, 1, 0 });
-	directions.emplace_back(VectorInt3{ 1, 1, 0 });
-	directions.emplace_back(VectorInt3{ 0, 1,-1 });
-	directions.emplace_back(VectorInt3{ 0, 1, 1 });
-	directions.emplace_back(VectorInt3{-1, 0, 1 });
-	directions.emplace_back(VectorInt3{ 1, 0, 1 });
-	directions.emplace_back(VectorInt3{-1, 1, 1 });
-	directions.emplace_back(VectorInt3{ 1, 1, 1 });
-	directions.emplace_back(VectorInt3{-1, 1,-1 });
-	directions.emplace_back(VectorInt3{ 1, 1,-1 });
+	directions.emplace_back(IntVector3{ 1, 0, 0 });
+	directions.emplace_back(IntVector3{ 0, 1, 0 });
+	directions.emplace_back(IntVector3{ 0, 0, 1 });
+	directions.emplace_back(IntVector3{-1, 1, 0 });
+	directions.emplace_back(IntVector3{ 1, 1, 0 });
+	directions.emplace_back(IntVector3{ 0, 1,-1 });
+	directions.emplace_back(IntVector3{ 0, 1, 1 });
+	directions.emplace_back(IntVector3{-1, 0, 1 });
+	directions.emplace_back(IntVector3{ 1, 0, 1 });
+	directions.emplace_back(IntVector3{-1, 1, 1 });
+	directions.emplace_back(IntVector3{ 1, 1, 1 });
+	directions.emplace_back(IntVector3{-1, 1,-1 });
+	directions.emplace_back(IntVector3{ 1, 1,-1 });
 }
