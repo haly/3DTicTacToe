@@ -69,12 +69,12 @@ private:
 	// END TEMPORARY VARIABLES
 
 	// Variables for in-game use
-	int turnCounter = 0;
-	int currentTurn = 0;
+	int turnCounter;
+	int currentTurn;
 
 	// Variables for state tracking
-	int gameState = 0;
-	bool quitFlag = true;
+	int gameState;
+	bool quitFlag;
 
 	CuboidArray board;
 

@@ -5,7 +5,7 @@
 #include "CuboidArray.h"
 
 
-CuboidArray::CuboidArray() {
+CuboidArray::CuboidArray() : elements(SIZE), directions() {
 	fillDirections();
 }
 
@@ -51,7 +51,7 @@ int& CuboidArray::operator()(const IntVector3& coords)  {
 std::ostream& operator<<(std::ostream& out, const CuboidArray& ca) {
 	int sliceOffset, index;
 
-	for (int i = 0; i < ca.LENGTH; ++i) {									// Loops through the rows.
+	for (int i = 0; i < ca.LENGTH; ++i) {								// Loops through the rows.
 		sliceOffset = 0;												// Resets the sliceOffset
 
 		for (int j = 0; j < 16; ++j) {									// Loops through the 16 elements of each row of the formatted string
@@ -69,9 +69,7 @@ std::ostream& operator<<(std::ostream& out, const CuboidArray& ca) {
 }
 
 void CuboidArray::zero() {
-	for (int i = 0; i < SIZE; ++i) {
-		elements[i] = 0;
-	}
+	std::fill(elements.begin(), elements.end(), 0);
 }
 
 // See overloaded << operator for loop explanation.
@@ -133,13 +131,13 @@ int CuboidArray::sumInDirection(const int x, const IntVector3& coords, const Int
 	while (inBounds) {
 		position += dir;
 
-		for (int i = 0; i < 3; ++i) {			// First check if the position is moving out of bounds.
+		for (int i = 0; i < 3; ++i) {			// First check if position is moving out of bounds.
 			if (position[i] < 0 || position[i] >= LENGTH) {
 				return sum;
 			}
 		}
 
-		if (this->operator()(position) == x) {	// Then increment the sum if this position gives a match.
+		if (this->operator()(position) == x) {	// Then increment the sum if position gives a match.
 			++sum;
 		}
 	}

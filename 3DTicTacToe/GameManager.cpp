@@ -5,7 +5,7 @@
 #include "GameManager.h"
 
 
-GameManager::GameManager() : board() {
+GameManager::GameManager() : turnCounter(0), currentTurn(0), gameState(0), quitFlag(true), board() {
 }
 
 
@@ -34,24 +34,38 @@ void GameManager::introduction() const {
 }
 
 void GameManager::setup() {
-	std::cout <<
-		"Setup"
-		"Enter the number of human players: (1, 2)";
-
 	std::string s;
+	std::cout <<
+		"Setup\n"
+		"Enter the number of human players: (1, 2)\n";
+
 	while (std::cin >> s) {
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
 		try {
 			numberOfHumans = stoi(s);
 		}
 		catch (std::exception e) {
 			std::cerr << "Input is either not a number or too large.\n";
+			continue;
 		}
-		std::cin.clear();
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+		if (numberOfHumans >= 1 && numberOfHumans <= 2) {
+			break;
+		}
+		else {
+			std::cout << "Input must be 1 or 2.\n";
+		}
 	}
 
 	// TODO: Fill the rest of the logic
+	if (numberOfHumans == 1) {
 
+	}
+	else if (numberOfHumans ==2) {
+
+	}
 }
 
 void GameManager::update() {

@@ -15,13 +15,13 @@
  */
 class IntVector3 {
 public:
-	inline IntVector3() {}
-	inline IntVector3(int x, int y, int z) {
+	IntVector3() {}
+	IntVector3(int x, int y, int z) {
 		triple[0] = x;
 		triple[1] = y;
 		triple[2] = z;
 	}
-	inline ~IntVector3() {}
+	~IntVector3() {}
 
 	int& operator[](int index) {
 		assert(index >= 0 && index < 3);
@@ -33,18 +33,18 @@ public:
 		return triple[index];
 	}
 
-	inline IntVector3 operator+=(const IntVector3& rhs) {
+	IntVector3 operator+=(const IntVector3& rhs) {
 		triple[0] += rhs[0];
 		triple[1] += rhs[1];
 		triple[2] += rhs[2];
 		return *this;
 	}
 
-	inline IntVector3 operator+(const IntVector3& rhs) {
+	IntVector3 operator+(const IntVector3& rhs) {
 		return IntVector3(*this += rhs);
 	}
 
-	inline IntVector3 inverse() const {
+	IntVector3 inverse() const {
 		return IntVector3(triple[0] * -1, triple[1] * -1, triple[2] * -1);
 	}
 

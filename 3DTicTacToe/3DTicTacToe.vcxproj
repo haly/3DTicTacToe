@@ -80,6 +80,7 @@
   <ItemGroup>
     <ClCompile Include="CuboidArray.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="Human.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -88,6 +89,7 @@
   <ItemGroup>
     <ClInclude Include="CuboidArray.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="Human.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="util.h" />

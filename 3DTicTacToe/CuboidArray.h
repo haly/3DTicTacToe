@@ -42,7 +42,6 @@ public:
 	 */
 	const int& CuboidArray::operator()(const int row, const int col, const int slice) const;
 	int& CuboidArray::operator()(const int row, const int col, const int slice) ;
-	
 
 	/*
 		Allows read/write access to a single element using a IntVector3.
@@ -84,12 +83,12 @@ private:
 	static const size_t SIZE = 64;
 	static const int LENGTH = 4;
 	static const int LENGTH_SQUARE = 16;
-
-	int elements[SIZE];
+		
+	std::vector<int> elements;
 	std::vector<IntVector3> directions;
 
 	/*
-		Helper function to count occurances of a single integer from a starting point in a direction
+		Helper function to count occurances of an integer given a starting point and a direction
 	 */
 	int sumInDirection(const int x, const IntVector3& coords, const IntVector3& dir) const;
 
