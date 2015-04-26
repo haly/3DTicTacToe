@@ -8,5 +8,5 @@ Human::~Human() {
 }
 
 IntVector3 Human::getMove(const CuboidArray& ca) {
-
+	return IntVector3(0, 0, 0);
 }

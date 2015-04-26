@@ -10,6 +10,8 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <initializer_list>
+
 #include "IntVector3.h"
 
 /*
@@ -83,40 +85,14 @@ private:
 	static const size_t SIZE = 64;
 	static const int LENGTH = 4;
 	static const int LENGTH_SQUARE = 16;
-		
+	static const std::vector<IntVector3> directions;
+
 	std::vector<int> elements;
-	std::vector<IntVector3> directions;
 
 	/*
 		Helper function to count occurances of an integer given a starting point and a direction
 	 */
 	int sumInDirection(const int x, const IntVector3& coords, const IntVector3& dir) const;
-
-	/*
-		Populate the list of directions used to check for four in a line.
-
-		This function is necessary because VS2013 is behind on its implementation of initialization lists in C++11. 
-		Otherwise, the following code could probably be used in the header.
-
-		std::vector<IntVector3> directions = {
-			IntVector3{ 1, 0, 0 },
-			IntVector3{ 0, 1, 0 },
-			IntVector3{ 0, 0, 1 },
-			IntVector3{-1, 1, 0 },
-			IntVector3{ 1, 1, 0 },
-			IntVector3{ 0, 1,-1 },
-			IntVector3{ 0, 1, 1 },
-			IntVector3{-1, 0, 1 },
-			IntVector3{ 1, 0, 1 },
-			IntVector3{-1, 1, 1 },
-			IntVector3{ 1, 1, 1 },
-			IntVector3{-1, 1,-1 },
-			IntVector3{ 1, 1,-1 }
-		}
-
-		It's regrettable.
-	*/
-	void fillDirections();
 };
 
 #endif

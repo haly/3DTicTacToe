@@ -6,13 +6,15 @@
 #ifndef GAMEMANAGER_H
 #define GAMEMANAGER_H
 
+#include <cassert>
 #include <string>
 #include <iostream>
 #include <vector>
 
-#include "CuboidArray.h"
 #include "util.h"
 #include "IntVector3.h"
+#include "CuboidArray.h"
+
 /*
 	GameManager is an instance of 3D TicTacToe and is responsible for flow control.
 

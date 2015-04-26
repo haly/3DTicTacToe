@@ -4,9 +4,23 @@
 */
 #include "CuboidArray.h"
 
+const std::vector<IntVector3> CuboidArray::directions{ 
+	{ 1, 0, 0 },
+	{ 0, 1, 0 },
+	{ 0, 0, 1 },
+	{-1, 1, 0 },
+	{ 1, 1, 0 },
+	{ 0, 1,-1 },
+	{ 0, 1, 1 },
+	{-1, 0, 1 },
+	{ 1, 0, 1 },
+	{-1, 1, 1 },
+	{ 1, 1, 1 },
+	{-1, 1,-1 },
+	{ 1, 1,-1 } 
+};
 
-CuboidArray::CuboidArray() : elements(SIZE), directions() {
-	fillDirections();
+CuboidArray::CuboidArray() : elements(SIZE) {
 }
 
 
@@ -143,20 +157,4 @@ int CuboidArray::sumInDirection(const int x, const IntVector3& coords, const Int
 	}
 
 	return sum;
-}
-
-void CuboidArray::fillDirections() {
-	directions.emplace_back(IntVector3{ 1, 0, 0 });
-	directions.emplace_back(IntVector3{ 0, 1, 0 });
-	directions.emplace_back(IntVector3{ 0, 0, 1 });
-	directions.emplace_back(IntVector3{-1, 1, 0 });
-	directions.emplace_back(IntVector3{ 1, 1, 0 });
-	directions.emplace_back(IntVector3{ 0, 1,-1 });
-	directions.emplace_back(IntVector3{ 0, 1, 1 });
-	directions.emplace_back(IntVector3{-1, 0, 1 });
-	directions.emplace_back(IntVector3{ 1, 0, 1 });
-	directions.emplace_back(IntVector3{-1, 1, 1 });
-	directions.emplace_back(IntVector3{ 1, 1, 1 });
-	directions.emplace_back(IntVector3{-1, 1,-1 });
-	directions.emplace_back(IntVector3{ 1, 1,-1 });
 }
