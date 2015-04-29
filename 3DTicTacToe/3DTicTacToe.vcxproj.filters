@@ -25,6 +25,12 @@
     <Filter Include="Source Files\Menus">
       <UniqueIdentifier>{783441c2-dc67-48af-8c79-32ec273dabd2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Utility">
+      <UniqueIdentifier>{55c708df-9484-4b26-824d-26ce61f52e5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utility">
+      <UniqueIdentifier>{70935c2a-70d9-463a-baca-8da8cdeb369d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -36,9 +42,6 @@
     <ClCompile Include="GameManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="util.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Source Files\Players</Filter>
     </ClCompile>
@@ -48,6 +51,9 @@
     <ClCompile Include="Human.cpp">
       <Filter>Source Files\Players</Filter>
     </ClCompile>
+    <ClCompile Include="util.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CuboidArray.h">
@@ -56,20 +62,20 @@
     <ClInclude Include="GameManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="util.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Header Files\Players</Filter>
-    </ClInclude>
-    <ClInclude Include="IntVector3.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Menu.h">
       <Filter>Header Files\Menus</Filter>
     </ClInclude>
     <ClInclude Include="Human.h">
       <Filter>Header Files\Players</Filter>
+    </ClInclude>
+    <ClInclude Include="IntVector3.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="util.h">
+      <Filter>Header Files\Utility</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

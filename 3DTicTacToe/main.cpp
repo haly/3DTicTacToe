@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include "GameManager.h"
+#include "Human.h"
 
 int main() {
 	GameManager game;

@@ -15,7 +15,10 @@
  */
 class IntVector3 {
 public:
-	IntVector3() {}
+	IntVector3() {
+		triple[0] = triple[1] = triple[2] = 0;
+	}
+
 	IntVector3(int x, int y, int z) {
 		triple[0] = x;
 		triple[1] = y;
@@ -50,6 +53,11 @@ public:
 
 	std::string toString() {
 		std::string s = std::to_string(triple[0]) + ' ' + std::to_string(triple[1]) + ' ' + std::to_string(triple[2]);
+		return s;
+	}
+
+	std::string toStringOffset() {
+		std::string s = std::to_string(triple[0] + 1) + ' ' + std::to_string(triple[1] + 1) + ' ' + std::to_string(triple[2] + 1);
 		return s;
 	}
 

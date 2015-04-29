@@ -121,6 +121,10 @@ std::string CuboidArray::printBoard() const{
 	return output;
 }
 
+bool CuboidArray::checkBounds(const int& coords) const {
+	return (coords >= 0 && coords < 4);
+}
+
 
 bool CuboidArray::findLineOfFour(const int x, const IntVector3& coords) const {
 	int sum;

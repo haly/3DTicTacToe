@@ -5,39 +5,34 @@
 #include "GameManager.h"
 
 
-GameManager::GameManager() : turnCounter(0), currentTurn(0), gameState(0), quitFlag(true), board() {
+GameManager::GameManager() : turnCounter(0), currentTurn(0), gameState(0), quitFlag(false), board() {
 }
 
-
 GameManager::~GameManager() {
+	if (playerO) {
+		delete playerO;
+	}
+	if (playerX) {
+		delete playerX;
+	}
 }
 
 void GameManager::initialize() {
 	board.zero();
 	turnCounter = 1;
 	currentTurn = PLAYER_X;
-	gameState = GAME_COMMENCE;
+	gameState = PRE_GAME;
 	quitFlag = false;
 }
 
 void GameManager::introduction() const {
-	std::cout <<
-		"3D TicTacToe, by Francis Yuan\n"
-		"Enter the number of human players.\n"
-		"'1' to play against an AI.\n"
-		"'2' to play against another local player.\n"
-		"\n"
-		"Other commands that can be entered at any time:\n"
-		"'reset' to return to this menu.\n"
-		"'quit' to quit the program.\n"
-		"\n";
+	std::cout << "3D TicTacToe, by Francis Yuan\n";
 }
 
 void GameManager::setup() {
+	std::cout << "Enter the number of human players: (1, 2)\n";
+	int numberOfHumans;
 	std::string s;
-	std::cout <<
-		"Setup\n"
-		"Enter the number of human players: (1, 2)\n";
 
 	while (std::cin >> s) {
 		std::cin.clear();
@@ -63,17 +58,26 @@ void GameManager::setup() {
 	if (numberOfHumans == 1) {
 
 	}
-	else if (numberOfHumans ==2) {
-
+	else if (numberOfHumans == 2) {
+		std::cout << "Starting 2 player game.\n\n";
+		playerX = new Human("Player X");
+		playerO = new Human("Player O");
+		gameState = IN_GAME;
 	}
 }
 
 void GameManager::update() {
-	if (gameState == GAME_COMMENCE) {
-		std::cout << board.printBoard();
-		printTurn();
+	switch (gameState) {
+		case PRE_GAME:
+			preGame();
+			break;
+		case IN_GAME:
+			inGame();
+			break; 
+		case POST_GAME:
+			postGame();
+			break;
 	}
-	getInput();
 }
 
 bool GameManager::quit() const {
@@ -81,7 +85,7 @@ bool GameManager::quit() const {
 }
 
 void GameManager::printTurn() {
-	std::cout << ((currentTurn == PLAYER_X) ? "Player X's turn:\n" : "Player O's turn:\n");
+	std::cout << ((currentTurn == PLAYER_X) ? *playerX : *playerO) << "'s turn:\n";
 }
 
 void GameManager::nextTurn() {
@@ -89,6 +93,45 @@ void GameManager::nextTurn() {
 	turnCounter++;
 }
 
+void GameManager::preGame() {
+
+}
+
+void GameManager::inGame() {
+	std::cout << board.printBoard();
+	printTurn();
+	IntVector3 newMove = (currentTurn == PLAYER_X) ? playerX->getMove(board) : playerO->getMove(board);
+	board(newMove) = currentTurn;
+
+	if (checkWinningMove(currentTurn, newMove)) {
+		gameState = PRE_GAME;
+	}
+	else {
+		nextTurn();
+	}
+}
+
+void GameManager::postGame() {
+
+}
+
+bool GameManager::checkWinningMove(const int& turn, const IntVector3& coords) {
+
+	if (board.findLineOfFour(turn, coords)) {
+		board.printBoard();
+		std::string winner = (turn == PLAYER_X) ? "Player X" : "Player O";
+		std::cout << winner << " is the winner! Type 'reset' to start a new game or 'quit' to close the program.\n";
+		return true;
+	}
+	else if (turnCounter == MAX_TURNS) {
+		board.printBoard();
+		std::cout << "The game is a tie. Type 'reset' to start a new game or 'quit' to close the program.\n";
+		return true;
+	}
+	return false;
+}
+
+/*
 void GameManager::getInput() {
 	bool valid = false;
 	std::string input;
@@ -169,26 +212,12 @@ bool GameManager::readCoords(const std::vector<std::string>& tokens) {
 			gameState = PRE_GAME;
 		}
 
-		if (gameState == GAME_COMMENCE) {
+		if (gameState == IN_GAME) {
 			nextTurn();
 		}
 	}
 
 	return true;
 }
+*/
 
-bool GameManager::checkWinningMove(const int& turn, const IntVector3& coords) {
-
-	if (board.findLineOfFour(turn, coords)) {
-		board.printBoard();
-		std::string winner = (turn == PLAYER_X) ? "Player X" : "Player O";
-		std::cout << winner << " is the winner! Type 'reset' to start a new game or 'quit' to close the program.\n";
-		return true;
-	}
-	else if (turnCounter == MAX_TURNS) {
-		board.printBoard();
-		std::cout << "The game is a tie. Type 'reset' to start a new game or 'quit' to close the program.\n";
-		return true;
-	}
-	return false;
-}

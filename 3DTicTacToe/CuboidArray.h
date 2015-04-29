@@ -77,10 +77,15 @@ public:
 	std::string printBoard() const;
 
 	/*
+		Checks to make sure if a single coordinate is within the bounds of the CuboidArray
+	*/
+	bool checkBounds(const int& coords) const;
+
+	/*
 		Checks to see if there are any straight or diagonal lines of four of a number at the specified coordinates.
 	 */
 	bool findLineOfFour(const int x, const IntVector3& coords) const;
-
+	
 private:
 	static const size_t SIZE = 64;
 	static const int LENGTH = 4;
@@ -95,4 +100,9 @@ private:
 	int sumInDirection(const int x, const IntVector3& coords, const IntVector3& dir) const;
 };
 
+enum BOARD_SPACES {
+	EMPTY = 0,
+	PLAYER_X = 1,
+	PLAYER_O = -1,
+};
 #endif

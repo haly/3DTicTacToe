@@ -7,17 +7,22 @@
 #define HUMAN_H
 
 #include "Player.h"
+#include "util.h"
 
 class Human :
 	public Player {
 public:
+	Human();
 	Human(std::string name);
 	~Human();
 
 	/*
-		A Human will request input via the console
+		A Human will request input from the console
 	 */
 	IntVector3 getMove(const CuboidArray& ca);
+
+private:
+	
 };
 #endif
 

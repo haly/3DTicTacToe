@@ -14,6 +14,8 @@
 #include "util.h"
 #include "IntVector3.h"
 #include "CuboidArray.h"
+#include "Player.h"
+#include "Human.h"
 
 /*
 	GameManager is an instance of 3D TicTacToe and is responsible for flow control.
@@ -65,12 +67,9 @@ private:
 	static const int MAX_TURNS = 64;
 
 	// TEMPORARY VARIABLES THAT WILL BE REPLACED WITH THE PLAYER SYSTEM
-	int numberOfHumans = 0;
-	int difficultyX = 0;
-	int difficultyY = 0;
 	// END TEMPORARY VARIABLES
 
-	// Variables for in-game use
+	// Variables for turn tracking
 	int turnCounter;
 	int currentTurn;
 
@@ -78,6 +77,9 @@ private:
 	int gameState;
 	bool quitFlag;
 
+	Player* playerX;
+	Player* playerO;
+	
 	CuboidArray board;
 
 	/*
@@ -91,35 +93,49 @@ private:
 	void nextTurn();
 
 	/*
-		Recieves and sanitizes input from the console.
-	 */
-	void getInput();
-
-	/*
-		Helper function to read single commands and inform the user of any syntatical errors.
+		Handles input to set up a game.
 	*/
-	bool readCommand(const std::vector<std::string>& tokens);
+	void preGame();
 
 	/*
-		Helper function to read three sequential numbers representing coordinates and inform the user of any syntatical errors.
+		Handles input for a game being played.
 	 */
-	bool readCoords(const std::vector<std::string>& tokens);
+	void inGame();
+
+	/*
+		Handles input after a game is done.
+	*/
+	void postGame();
 
 	/*
 		Checks if a winning move was just made, or if the entire board was just filled
-	 */
-	bool checkWinningMove(const int& turn, const IntVector3& coords);
-};
+	*/
 
-enum BOARD_SPACES { 
-	EMPTY = 0,
-	PLAYER_X = 1, 
-	PLAYER_O = -1,
+	bool checkWinningMove(const int& turn, const IntVector3& coords);
+
+	/*
+		Recieves and sanitizes input from the console.
+
+	void getInput();
+
+
+		Helper function to read single commands and inform the user of any syntatical errors.
+
+	bool readCommand(const std::vector<std::string>& tokens);
+
+
+		Helper function to read three sequential numbers representing coordinates and inform the user of any syntatical errors.
+
+	bool readCoords(const std::vector<std::string>& tokens);
+	*/
+
+	
 };
 
 enum GAME_STATE {
 	PRE_GAME = 0,
-	GAME_COMMENCE,
+	IN_GAME,
+	POST_GAME
 };
 
 #endif

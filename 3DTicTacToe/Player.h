@@ -7,6 +7,7 @@
 #define PLAYER_H
 
 #include <iostream>
+#include <vector>
 #include "IntVector3.h"
 #include "CuboidArray.h"
 
