@@ -9,9 +9,7 @@
 
 int main() {
 	GameManager game;
-	game.initialize();
 	game.introduction();
-	game.setup();
 	while (!game.quit()) {
 		game.update();
 	}

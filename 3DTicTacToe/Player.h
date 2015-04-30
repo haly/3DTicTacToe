@@ -19,7 +19,7 @@ public:
 	/*
 		Asks this player for a move.
 	 */
-	virtual IntVector3 getMove(const CuboidArray& ca) = 0;
+	virtual IntVector3 getMove(const int& myTurn, const CuboidArray& ca) = 0;
 
 	friend std::ostream& operator<<(std::ostream& out, const Player& p);
 protected:

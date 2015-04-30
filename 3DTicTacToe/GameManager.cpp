@@ -21,49 +21,10 @@ void GameManager::initialize() {
 	board.zero();
 	turnCounter = 1;
 	currentTurn = PLAYER_X;
-	gameState = PRE_GAME;
-	quitFlag = false;
 }
 
 void GameManager::introduction() const {
 	std::cout << "3D TicTacToe, by Francis Yuan\n";
-}
-
-void GameManager::setup() {
-	std::cout << "Enter the number of human players: (1, 2)\n";
-	int numberOfHumans;
-	std::string s;
-
-	while (std::cin >> s) {
-		std::cin.clear();
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-		try {
-			numberOfHumans = stoi(s);
-		}
-		catch (std::exception e) {
-			std::cerr << "Input is either not a number or too large.\n";
-			continue;
-		}
-
-		if (numberOfHumans >= 1 && numberOfHumans <= 2) {
-			break;
-		}
-		else {
-			std::cout << "Input must be 1 or 2.\n";
-		}
-	}
-
-	// TODO: Fill the rest of the logic
-	if (numberOfHumans == 1) {
-
-	}
-	else if (numberOfHumans == 2) {
-		std::cout << "Starting 2 player game.\n\n";
-		playerX = new Human("Player X");
-		playerO = new Human("Player O");
-		gameState = IN_GAME;
-	}
 }
 
 void GameManager::update() {
@@ -94,17 +55,53 @@ void GameManager::nextTurn() {
 }
 
 void GameManager::preGame() {
+	std::cout << "Enter the number of human players: (0, 1, 2)\n";
+	int numberOfHumans;
+	std::string s;
 
+	while (std::cin >> s) {
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+		try {
+			numberOfHumans = stoi(s);
+		}
+		catch (std::exception e) {
+			std::cerr << "Input is either not a number or too large.\n";
+			continue;
+		}
+
+		if (numberOfHumans >= 1 && numberOfHumans <= 2) {
+			break;
+		}
+		else {
+			std::cout << "Input must be 1 or 2.\n";
+		}
+	}
+	
+	if (numberOfHumans == 1) {
+		// TODO: Fill logic for AI game
+		return;
+	}
+	else if (numberOfHumans == 2) {
+		std::cout << "Starting 2 player game.\n\n";
+		playerX = new Human("Player X");
+		playerO = new Human("Player O");
+	}
+
+	gameState = IN_GAME;
+	initialize();
+	std::cout << board.printBoard();
 }
 
 void GameManager::inGame() {
-	std::cout << board.printBoard();
 	printTurn();
-	IntVector3 newMove = (currentTurn == PLAYER_X) ? playerX->getMove(board) : playerO->getMove(board);
+	IntVector3 newMove = (currentTurn == PLAYER_X) ? playerX->getMove(currentTurn, board) : playerO->getMove(currentTurn, board);
 	board(newMove) = currentTurn;
+	std::cout << board.printBoard();
 
 	if (checkWinningMove(currentTurn, newMove)) {
-		gameState = PRE_GAME;
+		gameState = POST_GAME;
 	}
 	else {
 		nextTurn();
@@ -112,7 +109,32 @@ void GameManager::inGame() {
 }
 
 void GameManager::postGame() {
+	std::cout <<	"Type 'replay' to play another game with the same settings.\n"
+					"Type 'start' to start a new game.\n"
+					"Type 'quit' to terminate the program.\n";
+	std::string s;
 
+	while (std::cin >> s) {
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+		if (s.compare("replay") == 0) {
+			std::cout << "Resetting the game...\n";
+			gameState = IN_GAME;
+			initialize();
+			std::cout << board.printBoard();
+			break;
+		}
+		else if (s.compare("start") == 0) {
+			std::cout << "Starting a new game...\n";
+			gameState = PRE_GAME;
+			break;
+		}
+		else if (s.compare("quit") == 0) {
+			quitFlag = true;
+			break;
+		}
+	}
 }
 
 bool GameManager::checkWinningMove(const int& turn, const IntVector3& coords) {
@@ -120,12 +142,12 @@ bool GameManager::checkWinningMove(const int& turn, const IntVector3& coords) {
 	if (board.findLineOfFour(turn, coords)) {
 		board.printBoard();
 		std::string winner = (turn == PLAYER_X) ? "Player X" : "Player O";
-		std::cout << winner << " is the winner! Type 'reset' to start a new game or 'quit' to close the program.\n";
+		std::cout << winner << " is the winner!\n";
 		return true;
 	}
 	else if (turnCounter == MAX_TURNS) {
 		board.printBoard();
-		std::cout << "The game is a tie. Type 'reset' to start a new game or 'quit' to close the program.\n";
+		std::cout << "The game is a tie.\n";
 		return true;
 	}
 	return false;

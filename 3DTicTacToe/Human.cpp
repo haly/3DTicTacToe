@@ -9,7 +9,7 @@ Human::Human(std::string name) : Player(name){
 Human::~Human() {
 }
 
-IntVector3 Human::getMove(const CuboidArray& ca) {
+IntVector3 Human::getMove(const int& myTurn, const CuboidArray& ca) {
 	std::cout << "Enter three coordinates. (e.g. 1 2 3)\n";
 
 	std::string s;
@@ -31,7 +31,7 @@ IntVector3 Human::getMove(const CuboidArray& ca) {
 
 			for (unsigned int i = 0; i < tokens.size(); i++) {	
 				try {
-					coordinates[i] = stoi(tokens[i]) + 1;			// Attempt integer conversion.
+					coordinates[i] = stoi(tokens[i]) - 1;	// Attempt integer conversion.
 				}
 				catch (std::exception e) {	
 					std::cerr << "The entry " << tokens[i] << " could not be read.\n";

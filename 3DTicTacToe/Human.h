@@ -19,10 +19,7 @@ public:
 	/*
 		A Human will request input from the console
 	 */
-	IntVector3 getMove(const CuboidArray& ca);
-
-private:
-	
+	IntVector3 getMove(const int& myTurn, const CuboidArray& ca);
 };
 #endif
 

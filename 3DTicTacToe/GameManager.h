@@ -37,21 +37,9 @@ public:
 	~GameManager();
 
 	/*
-		Sets initial values for a new game.
-	 */
-	void initialize();
-
-	/*
 		Prints game instructions to the console.
 	*/
 	void introduction() const;
-
-	// TEMPORARY FUNCTIONS THAT WILL BE REPLACED WITH A PROPER MENU SYSTEM
-	/*
-		Begins a long chain of input requests to sdetermine the initial state of the game.
-	*/
-	void setup();
-	// END TEMPORARY FUNCTIONS
 
 	/*
 		Cycles through game logic.
@@ -77,10 +65,15 @@ private:
 	int gameState;
 	bool quitFlag;
 
+	// Board and players
+	CuboidArray board;
 	Player* playerX;
 	Player* playerO;
-	
-	CuboidArray board;
+
+	/*
+		Resets the board and the turn trackers
+	*/
+	void initialize();
 
 	/*
 		Prints the current player's turn in the console.
